@@ -24,7 +24,7 @@ C:\> DCOMRunAs.exe <sess_id> <CLSID> [remote_host_if_remote]
 ## CLSID utilisables
 
 * `00F2B433-44E4-4D88-B2B0-2698A0A91DBA` (PhotoAcqHWEventHandler)
-    * Placer la DLL au endroits suivants :
+    * Placer la DLL à un des endroits suivants :
 	    * `C:\Program Files\Windows Photo Viewer\OLEACC.dll`
 	    * `C:\Program Files\Windows Photo Viewer\PROPSYS.dll`
 	    * `C:\Program Files\Windows Photo Viewer\STI.dll`
