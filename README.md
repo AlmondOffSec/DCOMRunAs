@@ -1,14 +1,14 @@
 # DCOMRunAs
 
-DCOMRunAs instantiates COM objects in the session of a logged-on user on a remote machine. By targetting a COM object subject to DLL hijacking and dropping a custom DLL at that path, the payload DLL will be loaded in the context of the logged-on remote user.
+DCOMRunAs instantiates COM objects in the session of a logged-on user on a remote machine. By targeting a COM object subject to DLL hijacking and dropping a custom DLL at that path, the payload DLL will be loaded in the context of the logged-on remote user.
 
 **Note:** This project is a proof-of-concept, and has not been extensively tested.
 
 ## Context & theory
 
-Initially an internal PoC developped last year, it is released following the publication of [BitlockMove](https://github.com/rtecCyberSec/BitlockMove) by @S3cur3Th1sSh1t, his [TROOPER 2025 slides](https://github.com/S3cur3Th1sSh1t/Creds/blob/master/Talks/Revisiting_Cross_Session_Activation_Troopers_2025.pdf) are a good overview of the general idea (looking forward to the recording and blogpost !).
+Initially an internal PoC developped last year, it is released following the publication of [BitlockMove](https://github.com/rtecCyberSec/BitlockMove) by @S3cur3Th1sSh1t, his [TROOPERS 2025 slides](https://github.com/S3cur3Th1sSh1t/Creds/blob/master/Talks/Revisiting_Cross_Session_Activation_Troopers_2025.pdf) are a good overview of the general idea (looking forward to the recording and blogpost !).
 
-Since the technique is now public, we decided to publish the tool as-is, even though it's not as thourously tested as we'd like, so obviously use at your own risk, and feel free to flag any issue in the repository tracker.
+Since the technique is now public, we decided to publish the tool as-is, even though it's not as thouroughly tested as we'd like, so obviously use at your own risk, and feel free to flag any issue in the repository tracker.
 
 The original idea (on our side) came from playing with James Forshaw's [oleviewdotnet](https://github.com/tyranid/oleviewdotnet) and noticing the "Create In Session" button for objects running as `Interactive User`. The moniker code was taken and adapted to C from [here](https://github.com/tyranid/oleviewdotnet/blob/7e9aa884e013b6773ef578ad391dbad9b30c11da/OleViewDotNet/Utilities/COMUtilities.cs#L145) and the `CoGetObject` code from [there](https://github.com/tyranid/oleviewdotnet/blob/7e9aa884e013b6773ef578ad391dbad9b30c11da/OleViewDotNet/Utilities/COMUtilities.cs#L130).
 
@@ -21,7 +21,7 @@ Main differences with `BitlockMove`:
     * loading a "well-known" DLL (`version.dll` and such, specifically not a `KnownDLL`) from an unexpected path
     * cross-session activation with `CoGetObject` and a session moniker
 * Common OPSEC considerations (for completeness)
-    * remote instatiation of a specific CLSID
+    * remote instantiation of a specific CLSID
     * signed process loading an unexpected unsigned DLL
 
 ## Practice
