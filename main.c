@@ -58,7 +58,10 @@ BOOL InstanciateInSession(int iSessId, WCHAR* wszCLSID, WCHAR* wszRemoteHost) {
 		wprintf(L"Error in CoGetObject: 0x%x\n", hResult);
 		bSTATE = FALSE; goto _EndOfFunc;
 	}
-
+	else if (SUCCEEDED(hResult)) {
+		wprintf(L"CoGetObject succeeded, releasing...\n");
+		pUnknown->lpVtbl->Release(pUnknown);
+	}
 
 _EndOfFunc:
 	return bSTATE;
